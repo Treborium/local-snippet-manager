@@ -1,0 +1,31 @@
+name: lsm
+version: "1.0"
+about: Local Snippet Manager
+author: Robert Fuchs <robertfuchs97@gmail.com>
+
+# AppSettings can be defined as a list and are **not** ascii case sensitive
+settings:
+    - ArgRequiredElseHelp
+
+# All subcommands must be listed in the 'subcommand:' object, where the key to
+# the list is the name of the subcommand, and all settings for that command are
+# are part of a Hash object
+subcommands:
+    - run:
+        about: Run a command
+        version: "0.1"
+        author: Robert Fuchs <robertfuchs97@gmail.com>
+        args:
+            - command:
+                multiple: true
+                required: true
+                help: command to run
+                takes_value: true
+    - ls:
+        about: List available commands
+        version: "0.1"
+        author: Robert Fuchs <robertfuchs97@gmail.com>
+    - sel:
+        about: Select a command
+        version: "0.1"
+        author: Robert Fuchs <robertfuchs97@gmail.com>
