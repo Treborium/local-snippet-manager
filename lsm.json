@@ -1,0 +1,11 @@
+{
+  "Navigation": {
+    "List Content": "/usr/bin/lsd",
+    "Go to Parent Folder": "/usr/bin/cd .."
+  },
+  "Git": {
+    "Status": "/usr/bin/git status",
+    "Pull": "/usr/bin/git pull",
+    "Push": "/usr/bin/git push"
+  }
+}
