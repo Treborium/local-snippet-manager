@@ -1,11 +1,13 @@
 {
-  "Navigation": {
-    "List Content": "/usr/bin/lsd",
-    "Go to Parent Folder": "/usr/bin/cd .."
+  "Cargo": {
+    "Build": "cargo build",
+    "Run": "cargo run"
   },
   "Git": {
-    "Status": "/usr/bin/git status",
     "Pull": "/usr/bin/git pull",
     "Push": "/usr/bin/git push"
+  },
+  "Python": {
+    "Spawn Shell": "python"
   }
 }

@@ -5,19 +5,18 @@ use structopt::StructOpt;
 use std::collections::HashMap;
 use std::error::Error;
 use std::fs::File;
-use std::io::{self, Write, BufReader};
-use std::process::{Command, Output};
+use std::io::{Write, BufReader};
+use std::process::Command;
 
 type LSM = HashMap<String, HashMap<String, String>>;
 
-fn run_cmd(cmd: &str) -> Result<(), Box<dyn Error>> {
-    let output = Command::new("sh")
-        .arg("-c")
-        .arg(cmd)
-        .output()?;
+const DEFAULT_TERMINAL: &str = "/usr/bin/kitty";
 
-    std::io::stdout().write_all(&output.stdout)?;
-    Ok(())
+fn run_cmd(cmd: &str) -> Result<std::process::Child, std::io::Error> {
+    Command::new(DEFAULT_TERMINAL)
+        // .arg("--hold")  // Keep the terminal emulator alive after command finished
+        .arg(cmd)
+        .spawn()
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -28,5 +27,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Read the JSON contents of the file as an instance of `User`.
     let json = serde_json::from_reader::<BufReader<File>, LSM>(reader)?;
     println!("{:#?}", json);
-    run_cmd(&json["Navigation"]["List Content"])
+    let _handle = run_cmd("ls");
+
+    Ok(())
 }
