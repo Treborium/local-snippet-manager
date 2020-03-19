@@ -8,6 +8,8 @@
     "Push": "/usr/bin/git push"
   },
   "Python": {
-    "Spawn Shell": "python"
+    "Spawn Shell": "python",
+    "AAAAAAAAAAAAAAAAAAAA": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+    "A really long line that should get wrapped hopefully :)": "here is a very long command that also should get wrapped at some point. idk when though so I'll just keep typing"
   }
 }
