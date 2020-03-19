@@ -21,9 +21,9 @@ subcommands:
                 required: false
                 help: Command to run
                 takes_value: true
-            - hold:
-                short: h
-                long: hold
+            - keep:
+                short: k
+                long: keep
                 help: Keep the spawned terminal alive after command finished
                 multiple: false
                 required: false

@@ -9,11 +9,11 @@ type LSM = HashMap<String, HashMap<String, String>>;
 
 const DEFAULT_TERMINAL: &str = "/usr/bin/kitty";
 
-fn execute(cmd: &str, hold: bool) -> Result<std::process::Child, std::io::Error> {
+fn execute(cmd: &str, keep: bool) -> Result<std::process::Child, std::io::Error> {
     let mut shell_args: Vec<String> = Vec::new();
     let sub_commands: Vec<&str> = cmd.split(' ').collect();
 
-    if hold {
+    if keep {
         shell_args.push(String::from("--hold"));
     }
 
@@ -25,11 +25,13 @@ fn execute(cmd: &str, hold: bool) -> Result<std::process::Child, std::io::Error>
 }
 
 fn run(commands: &HashMap<String, String>, matches: &ArgMatches) {
+    let keep = matches.is_present("keep");
+
     match matches.value_of("command") {
         Some(input) => {
             match commands.get(input) {
                 Some(cmd) => {
-                    let _ = execute(cmd, matches.is_present("hold"));
+                    let _ = execute(cmd, keep);
                 }
                 None => {
                     eprintln!("'{}' not found! Please make sure there are no typos.", input);
@@ -43,7 +45,7 @@ fn run(commands: &HashMap<String, String>, matches: &ArgMatches) {
             if !choice.is_empty() {
                 let _ = execute(
                     commands.get(&choice[..choice.len() - 1]).unwrap(),
-                    matches.is_present("hold"),
+                    keep,
                 );
             }
         }
