@@ -29,3 +29,10 @@ subcommands:
         about: Select a command
         version: "0.1"
         author: Robert Fuchs <robertfuchs97@gmail.com>
+        args:
+            - hold:
+                short: h
+                long: hold
+                help: Keep the spawned terminal alive after command finished
+                multiple: false
+                required: false

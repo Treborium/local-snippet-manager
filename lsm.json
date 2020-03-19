@@ -1,7 +1,7 @@
 {
   "Cargo": {
-    "Build": "cargo build",
-    "Run": "cargo run"
+    "Build": "/home/treborium/.cargo/bin/cargo build",
+    "Run": "/home/treborium/.cargo/bin/cargo run"
   },
   "Git": {
     "Pull": "/usr/bin/git pull",
@@ -11,5 +11,9 @@
     "Spawn Shell": "python",
     "AAAAAAAAAAAAAAAAAAAA": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
     "A really long line that should get wrapped hopefully :)": "here is a very long command that also should get wrapped at some point. idk when though so I'll just keep typing"
+  },
+  "Navigation": {
+    "List content": "ls",
+    "Print working directory": "pwd"
   }
 }
