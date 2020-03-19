@@ -12,7 +12,7 @@ type LSM = HashMap<String, HashMap<String, String>>;
 
 const DEFAULT_TERMINAL: &str = "/usr/bin/kitty";
 
-fn run(cmd: &str, hold: bool) -> Result<std::process::Child, std::io::Error> {
+fn execute(cmd: &str, hold: bool) -> Result<std::process::Child, std::io::Error> {
     let mut args: Vec<String> = Vec::new();
 
     if hold {
@@ -22,11 +22,26 @@ fn run(cmd: &str, hold: bool) -> Result<std::process::Child, std::io::Error> {
     Command::new(DEFAULT_TERMINAL).args(&args).arg(cmd).spawn()
 }
 
+fn run(commands: &HashMap<String, String>, matches: &ArgMatches) -> Result<(), std::io::Error> {
+    let input = matches.value_of("command").unwrap();
+
+    match commands.get(input) {
+        Some(cmd) => {
+            let _ = execute(cmd, matches.is_present("hold"));
+            Ok(())
+        }
+        None => return Err(std::io::Error::new(
+            std::io::ErrorKind::NotFound,
+            format!("<{}> not found! Please make sure there are no typos.", input)
+        )),
+    }
+}
+
 fn sel(commands: &HashMap<String, String>, matches: &ArgMatches) -> Result<(), Box<dyn Error>> {
    let choice = make_choice(&commands);
 
     if !choice.is_empty() {
-        let _ = run(
+        let _ = execute(
             commands.get(&choice[..choice.len() - 1]).unwrap(),
             matches.is_present("hold"),
         );
@@ -85,13 +100,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     let matches = App::from(yml).get_matches();
 
     match matches.subcommand() {
-        ("run", Some(run_matches)) => {
-            let _ = run(run_matches.value_of("command").unwrap(), false);
-        }
+        ("run", Some(run_matches)) => run(&commands, &run_matches)?,
         ("ls", Some(_ls_matches)) => println!("{:#?}", commands),
-        ("sel", Some(sel_matches)) => {
-            let _ = sel(&commands, &sel_matches);
-        }
+        ("sel", Some(sel_matches)) => sel(&commands, &sel_matches)?,
         ("print", Some(_print_matches)) => print(&commands),
         ("", None) => println!("No subcommand was used"), // If no subcommand was usd it'll match the tuple ("", None)
         _ => unreachable!(), // If all subcommands are defined above, anything else is unreachabe!()

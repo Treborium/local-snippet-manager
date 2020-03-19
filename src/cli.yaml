@@ -19,8 +19,14 @@ subcommands:
             - command:
                 multiple: true
                 required: true
-                help: command to run
+                help: Command to run
                 takes_value: true
+            - hold:
+                short: h
+                long: hold
+                help: Keep the spawned terminal alive after command finished
+                multiple: false
+                required: false
     - ls:
         about: List available commands
         version: "0.1"
