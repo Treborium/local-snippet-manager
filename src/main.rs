@@ -29,19 +29,15 @@ fn run(commands: &HashMap<String, String>, matches: &ArgMatches) {
 
     match matches.value_of("command") {
         Some(input) => {
-            match commands.get(input) {
-                Some(cmd) => {
-                    let _ = execute(cmd, keep);
-                }
-                None => {
-                    eprintln!("'{}' not found! Please make sure there are no typos.", input);
-                    std::process::exit(-1)
-                }
-            }
+            commands.get(input)
+            .map(|cmd| execute(cmd, keep))
+            .or_else(|| {
+                eprintln!("'{}' not found! Please make sure there are no typos.", input);
+                std::process::exit(-1)
+            });
         }
         None => {
             let choice = make_choice(&commands);
-
             if !choice.is_empty() {
                 let _ = execute(
                     commands.get(&choice[..choice.len() - 1]).unwrap(),
@@ -50,6 +46,7 @@ fn run(commands: &HashMap<String, String>, matches: &ArgMatches) {
             }
         }
     }
+
 }
 
 fn print(commands: &HashMap<String, String>) {
@@ -107,6 +104,6 @@ fn main() {
         ("ls", Some(_ls_matches)) => println!("{:#?}", commands),
         ("print", Some(_print_matches)) => print(&commands),
         ("", None) => println!("No sub command was used"), // If no subcommand was usd it'll match the tuple ("", None)
-        _ => unreachable!(), // If all subcommands are defined above, anything else is unreachabe!()
+        _ => unreachable!(), // If all subcommands are defined above, anything else is unreachable!()
     }
 }
