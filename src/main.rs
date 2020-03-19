@@ -6,8 +6,6 @@ use std::process::Command;
 
 use clap::{load_yaml, App, ArgMatches};
 
-mod display;
-
 type LSM = HashMap<String, HashMap<String, String>>;
 
 const DEFAULT_TERMINAL: &str = "/usr/bin/kitty";
