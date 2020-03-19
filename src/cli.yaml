@@ -18,7 +18,7 @@ subcommands:
         args:
             - command:
                 multiple: true
-                required: true
+                required: false
                 help: Command to run
                 takes_value: true
             - hold:
@@ -31,17 +31,6 @@ subcommands:
         about: List available commands
         version: "0.1"
         author: Robert Fuchs <robertfuchs97@gmail.com>
-    - sel:
-        about: Select a command
-        version: "0.1"
-        author: Robert Fuchs <robertfuchs97@gmail.com>
-        args:
-            - hold:
-                short: h
-                long: hold
-                help: Keep the spawned terminal alive after command finished
-                multiple: false
-                required: false
     - print:
         about: Print a command
         version: "0.1"

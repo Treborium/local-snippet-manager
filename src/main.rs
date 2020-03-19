@@ -18,34 +18,35 @@ fn execute(cmd: &str, hold: bool) -> Result<std::process::Child, std::io::Error>
     }
 
     Command::new(DEFAULT_TERMINAL)
-        .args(&shell_args)
-        .arg(sub_commands[0])
-        .args(&sub_commands[1..])
+        .args(&shell_args)  // This are arguments for the terminal emulator that is spawned
+        .arg(sub_commands[0])  // This is the actual command
+        .args(&sub_commands[1..]) // This are sub commands, flags, arguments, etc.
         .spawn()
 }
 
 fn run(commands: &HashMap<String, String>, matches: &ArgMatches) {
-    let input = matches.value_of("command").unwrap();
-
-    match commands.get(input) {
-        Some(cmd) => {
-            let _ = execute(cmd, matches.is_present("hold"));
+    match matches.value_of("command") {
+        Some(input) => {
+            match commands.get(input) {
+                Some(cmd) => {
+                    let _ = execute(cmd, matches.is_present("hold"));
+                }
+                None => {
+                    eprintln!("'{}' not found! Please make sure there are no typos.", input);
+                    std::process::exit(-1)
+                }
+            }
         }
         None => {
-            eprintln!("'{}' not found! Please make sure there are no typos.", input);
-            std::process::exit(-1)
+            let choice = make_choice(&commands);
+
+            if !choice.is_empty() {
+                let _ = execute(
+                    commands.get(&choice[..choice.len() - 1]).unwrap(),
+                    matches.is_present("hold"),
+                );
+            }
         }
-    }
-}
-
-fn sel(commands: &HashMap<String, String>, matches: &ArgMatches) {
-   let choice = make_choice(&commands);
-
-    if !choice.is_empty() {
-        let _ = execute(
-            commands.get(&choice[..choice.len() - 1]).unwrap(),
-            matches.is_present("hold"),
-        );
     }
 }
 
@@ -59,8 +60,7 @@ fn print(commands: &HashMap<String, String>) {
 
 fn make_choice(commands: &HashMap<String, String>) -> String {
     let mut fzf = Command::new("fzf")
-    // .args(&["--preview=", "hello world"])
-    // .arg("--tac")
+    // .arg(format!("--preview=echo \"{}\"", "Hello World!"))
     .stdin(std::process::Stdio::piped())
     .stdout(std::process::Stdio::piped())
     .spawn()
@@ -103,9 +103,8 @@ fn main() {
     match matches.subcommand() {
         ("run", Some(run_matches)) => run(&commands, &run_matches),
         ("ls", Some(_ls_matches)) => println!("{:#?}", commands),
-        ("sel", Some(sel_matches)) => sel(&commands, &sel_matches),
         ("print", Some(_print_matches)) => print(&commands),
-        ("", None) => println!("No subcommand was used"), // If no subcommand was usd it'll match the tuple ("", None)
+        ("", None) => println!("No sub command was used"), // If no subcommand was usd it'll match the tuple ("", None)
         _ => unreachable!(), // If all subcommands are defined above, anything else is unreachabe!()
     }
 }
